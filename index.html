@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Two-Mass Spring System | Eigenvalues & Vibrations</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- =====================
+       INTERNAL CSS (Qt + Dominant Look)
+  ====================== -->
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #0f172a, #020617);
+      color: #e5e7eb;
+    }
+
+    header {
+      padding: 40px 20px;
+      text-align: center;
+      background: linear-gradient(90deg, #2563eb, #7c3aed);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    header h1 {
+      font-size: 2.6rem;
+      margin: 0;
+      letter-spacing: 1px;
+    }
+
+    header p {
+      opacity: 0.9;
+      font-size: 1.1rem;
+    }
+
+    section {
+      padding: 40px 8%;
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.85);
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    h2 {
+      color: #60a5fa;
+      margin-top: 0;
+    }
+
+    code {
+      background: #020617;
+      padding: 4px 8px;
+      border-radius: 6px;
+      color: #22d3ee;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      border: none;
+      margin-top: 5px;
+      background: #020617;
+      color: #e5e7eb;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 24px;
+      border-radius: 30px;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      background: linear-gradient(90deg, #22d3ee, #38bdf8);
+      color: #020617;
+      font-weight: bold;
+      box-shadow: 0 10px 25px rgba(56,189,248,0.4);
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    canvas {
+      background: #020617;
+      border-radius: 12px;
+      width: 100%;
+      height: 200px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      opacity: 0.6;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =====================
+       HEADER
+  ====================== -->
+  <header>
+    <h1>Two‑Mass Spring Vibration System</h1>
+    <p>Eigenvalues • Natural Frequencies • Physical Mode Shapes</p>
+  </header>
+
+  <!-- =====================
+       THEORY SECTION
+  ====================== -->
+  <section>
+    <div class="card">
+      <h2>1. Mathematical Model</h2>
+      <p>The equations of motion are written in matrix form:</p>
+      <p><code>[M]{x¨} + [K]{x} = 0</code></p>
+      <p>Assuming harmonic motion <code>{x} = {X}e^{iωt}</code>, we obtain:</p>
+      <p><code>([K] − ω²[M]){X} = 0</code></p>
+      <p>This becomes an <strong>eigenvalue problem</strong>. Solving it gives the natural frequencies.</p>
+    </div>
+
+    <div class="card">
+      <h2>2. Physical Interpretation</h2>
+      <ul>
+        <li>Eigenvalues → <strong>ω² (square of natural frequencies)</strong></li>
+        <li>Eigenvectors → <strong>Mode shapes</strong></li>
+        <li>First mode: masses move together (low frequency)</li>
+        <li>Second mode: masses move opposite (high frequency)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- =====================
+       CALCULATION SECTION
+  ====================== -->
+  <section>
+    <div class="card">
+      <h2>3. Interactive Eigenvalue Calculator</h2>
+
+      <div class="grid">
+        <div>
+          <label>Mass m₁</label>
+          <input id="m1" value="1" />
+        </div>
+        <div>
+          <label>Mass m₂</label>
+          <input id="m2" value="1" />
+        </div>
+        <div>
+          <label>Spring k₁</label>
+          <input id="k1" value="100" />
+        </div>
+        <div>
+          <label>Spring k₂</label>
+          <input id="k2" value="100" />
+        </div>
+        <div>
+          <label>Spring k₃</label>
+          <input id="k3" value="100" />
+        </div>
+      </div>
+
+      <button onclick="calculate()">Calculate Natural Frequencies</button>
+
+      <p id="output"></p>
+    </div>
+  </section>
+
+  <!-- =====================
+       VISUALIZATION
+  ====================== -->
+  <section>
+    <div class="card">
+      <h2>4. Vibration Visualization (Mode Shape)</h2>
+      <canvas id="viz"></canvas>
+    </div>
+  </section>
+
+  <!-- =====================
+       FOOTER
+  ====================== -->
+  <footer>
+    Eigenvalue Based Vibration Analysis • Physics meets Linear Algebra
+  </footer>
+
+  <!-- =====================
+       INTERNAL JAVASCRIPT
+  ====================== -->
+  <script>
+    const canvas = document.getElementById('viz');
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+
+    let t = 0;
+    let freq1 = 0, freq2 = 0;
+
+    function calculate() {
+      const m1 = parseFloat(m1El.value);
+      const m2 = parseFloat(m2El.value);
+      const k1 = parseFloat(k1El.value);
+      const k2 = parseFloat(k2El.value);
+      const k3 = parseFloat(k3El.value);
+
+      // Simplified eigenvalue solution for demo
+      const a = (k1 + k2) / m1;
+      const d = (k2 + k3) / m2;
+      const b = -k2 / Math.sqrt(m1 * m2);
+
+      const trace = a + d;
+      const det = a * d - b * b;
+
+      const lambda1 = (trace + Math.sqrt(trace * trace - 4 * det)) / 2;
+      const lambda2 = (trace - Math.sqrt(trace * trace - 4 * det)) / 2;
+
+      freq1 = Math.sqrt(lambda1);
+      freq2 = Math.sqrt(lambda2);
+
+      document.getElementById('output').innerHTML =
+        <strong>ω₁ = ${freq1.toFixed(2)} rad/s</strong><br> +
+        <strong>ω₂ = ${freq2.toFixed(2)} rad/s</strong>;
+    }
+
+    const m1El = document.getElementById('m1');
+    const m2El = document.getElementById('m2');
+    const k1El = document.getElementById('k1');
+    const k2El = document.getElementById('k2');
+    const k3El = document.getElementById('k3');
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const x1 = canvas.width / 2 - 80 + 30 * Math.sin(freq1 * t);
+      const x2 = canvas.width / 2 + 80 - 30 * Math.sin(freq2 * t);
+
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillRect(x1 - 20, canvas.height / 2 - 20, 40, 40);
+      ctx.fillRect(x2 - 20, canvas.height / 2 - 20, 40, 40);
+
+      t += 0.02;
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+
+</body>
+</html>
