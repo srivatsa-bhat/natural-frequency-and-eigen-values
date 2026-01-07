@@ -5,9 +5,6 @@
   <title>Two-Mass Spring System | Eigenvalues & Vibrations</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- =====================
-       INTERNAL CSS (Qt + Dominant Look)
-  ====================== -->
   <style>
     body {
       margin: 0;
@@ -26,7 +23,6 @@
     header h1 {
       font-size: 2.6rem;
       margin: 0;
-      letter-spacing: 1px;
     }
 
     header p {
@@ -44,7 +40,6 @@
       padding: 30px;
       margin-bottom: 30px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,255,255,0.05);
     }
 
     h2 {
@@ -61,7 +56,7 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 20px;
     }
 
@@ -91,18 +86,13 @@
       background: linear-gradient(90deg, #22d3ee, #38bdf8);
       color: #020617;
       font-weight: bold;
-      box-shadow: 0 10px 25px rgba(56,189,248,0.4);
-    }
-
-    button:hover {
-      transform: scale(1.05);
     }
 
     canvas {
       background: #020617;
       border-radius: 12px;
       width: 100%;
-      height: 200px;
+      height: 220px;
     }
 
     footer {
@@ -113,153 +103,137 @@
     }
   </style>
 </head>
+
 <body>
 
-  <!-- =====================
-       HEADER
-  ====================== -->
-  <header>
-    <h1>Two‑Mass Spring Vibration System</h1>
-    <p>Eigenvalues • Natural Frequencies • Physical Mode Shapes</p>
-  </header>
+<header>
+  <h1>Two-Mass Spring Vibration System</h1>
+  <p>Eigenvalues • Natural Frequencies • Mode Shapes</p>
+</header>
 
-  <!-- =====================
-       THEORY SECTION
-  ====================== -->
-  <section>
-    <div class="card">
-      <h2>1. Mathematical Model</h2>
-      <p>The equations of motion are written in matrix form:</p>
-      <p><code>[M]{x¨} + [K]{x} = 0</code></p>
-      <p>Assuming harmonic motion <code>{x} = {X}e^{iωt}</code>, we obtain:</p>
-      <p><code>([K] − ω²[M]){X} = 0</code></p>
-      <p>This becomes an <strong>eigenvalue problem</strong>. Solving it gives the natural frequencies.</p>
-    </div>
+<section>
+  <div class="card">
+    <h2>1. Mathematical Model</h2>
+    <p>Equation of motion:</p>
+    <p><code>[M]{ẍ} + [K]{x} = 0</code></p>
+    <p>Assuming harmonic motion:</p>
+    <p><code>{x} = {X}e^{iωt}</code></p>
+    <p>This leads to the eigenvalue problem:</p>
+    <p><code>([K] − ω²[M]){X} = 0</code></p>
+  </div>
 
-    <div class="card">
-      <h2>2. Physical Interpretation</h2>
-      <ul>
-        <li>Eigenvalues → <strong>ω² (square of natural frequencies)</strong></li>
-        <li>Eigenvectors → <strong>Mode shapes</strong></li>
-        <li>First mode: masses move together (low frequency)</li>
-        <li>Second mode: masses move opposite (high frequency)</li>
-      </ul>
-    </div>
-  </section>
+  <div class="card">
+    <h2>2. Physical Meaning</h2>
+    <ul>
+      <li>Eigenvalues → ω² (natural frequencies squared)</li>
+      <li>Eigenvectors → mode shapes</li>
+      <li>Mode 1: masses move together</li>
+      <li>Mode 2: masses move opposite</li>
+    </ul>
+  </div>
+</section>
 
-  <!-- =====================
-       CALCULATION SECTION
-  ====================== -->
-  <section>
-    <div class="card">
-      <h2>3. Interactive Eigenvalue Calculator</h2>
+<section>
+  <div class="card">
+    <h2>3. Eigenvalue Calculator</h2>
 
-      <div class="grid">
-        <div>
-          <label>Mass m₁</label>
-          <input id="m1" value="1" />
-        </div>
-        <div>
-          <label>Mass m₂</label>
-          <input id="m2" value="1" />
-        </div>
-        <div>
-          <label>Spring k₁</label>
-          <input id="k1" value="100" />
-        </div>
-        <div>
-          <label>Spring k₂</label>
-          <input id="k2" value="100" />
-        </div>
-        <div>
-          <label>Spring k₃</label>
-          <input id="k3" value="100" />
-        </div>
+    <div class="grid">
+      <div>
+        <label>Mass m₁</label>
+        <input id="m1" value="1">
       </div>
-
-      <button onclick="calculate()">Calculate Natural Frequencies</button>
-
-      <p id="output"></p>
+      <div>
+        <label>Mass m₂</label>
+        <input id="m2" value="1">
+      </div>
+      <div>
+        <label>Spring k₁</label>
+        <input id="k1" value="100">
+      </div>
+      <div>
+        <label>Spring k₂</label>
+        <input id="k2" value="100">
+      </div>
+      <div>
+        <label>Spring k₃</label>
+        <input id="k3" value="100">
+      </div>
     </div>
-  </section>
 
-  <!-- =====================
-       VISUALIZATION
-  ====================== -->
-  <section>
-    <div class="card">
-      <h2>4. Vibration Visualization (Mode Shape)</h2>
-      <canvas id="viz"></canvas>
-    </div>
-  </section>
+    <button onclick="calculate()">Calculate Natural Frequencies</button>
+    <p id="output"></p>
+  </div>
+</section>
 
-  <!-- =====================
-       FOOTER
-  ====================== -->
-  <footer>
-    Eigenvalue Based Vibration Analysis • Physics meets Linear Algebra
-  </footer>
+<section>
+  <div class="card">
+    <h2>4. Mode Shape Animation</h2>
+    <canvas id="viz"></canvas>
+  </div>
+</section>
 
-  <!-- =====================
-       INTERNAL JAVASCRIPT
-  ====================== -->
-  <script>
-    const canvas = document.getElementById('viz');
-    const ctx = canvas.getContext('2d');
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+<footer>
+  Eigenvalue-Based Vibration Analysis • Linear Algebra in Physics
+</footer>
 
-    let t = 0;
-    let freq1 = 0, freq2 = 0;
+<script>
+  const canvas = document.getElementById("viz");
+  const ctx = canvas.getContext("2d");
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
 
-    function calculate() {
-      const m1 = parseFloat(m1El.value);
-      const m2 = parseFloat(m2El.value);
-      const k1 = parseFloat(k1El.value);
-      const k2 = parseFloat(k2El.value);
-      const k3 = parseFloat(k3El.value);
+  const m1El = document.getElementById("m1");
+  const m2El = document.getElementById("m2");
+  const k1El = document.getElementById("k1");
+  const k2El = document.getElementById("k2");
+  const k3El = document.getElementById("k3");
 
-      // Simplified eigenvalue solution for demo
-      const a = (k1 + k2) / m1;
-      const d = (k2 + k3) / m2;
-      const b = -k2 / Math.sqrt(m1 * m2);
+  let t = 0;
+  let freq1 = 0;
+  let freq2 = 0;
 
-      const trace = a + d;
-      const det = a * d - b * b;
+  function calculate() {
+    const m1 = parseFloat(m1El.value);
+    const m2 = parseFloat(m2El.value);
+    const k1 = parseFloat(k1El.value);
+    const k2 = parseFloat(k2El.value);
+    const k3 = parseFloat(k3El.value);
 
-      const lambda1 = (trace + Math.sqrt(trace * trace - 4 * det)) / 2;
-      const lambda2 = (trace - Math.sqrt(trace * trace - 4 * det)) / 2;
+    const a = (k1 + k2) / m1;
+    const d = (k2 + k3) / m2;
+    const b = -k2 / Math.sqrt(m1 * m2);
 
-      freq1 = Math.sqrt(lambda1);
-      freq2 = Math.sqrt(lambda2);
+    const trace = a + d;
+    const det = a * d - b * b;
 
-      document.getElementById('output').innerHTML =
-        <strong>ω₁ = ${freq1.toFixed(2)} rad/s</strong><br> +
-        <strong>ω₂ = ${freq2.toFixed(2)} rad/s</strong>;
-    }
+    const lambda1 = (trace + Math.sqrt(trace * trace - 4 * det)) / 2;
+    const lambda2 = (trace - Math.sqrt(trace * trace - 4 * det)) / 2;
 
-    const m1El = document.getElementById('m1');
-    const m2El = document.getElementById('m2');
-    const k1El = document.getElementById('k1');
-    const k2El = document.getElementById('k2');
-    const k3El = document.getElementById('k3');
+    freq1 = Math.sqrt(lambda1);
+    freq2 = Math.sqrt(lambda2);
 
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    document.getElementById("output").innerHTML = `
+      <strong>ω₁ = ${freq1.toFixed(2)} rad/s</strong><br>
+      <strong>ω₂ = ${freq2.toFixed(2)} rad/s</strong>
+    `;
+  }
 
-      const x1 = canvas.width / 2 - 80 + 30 * Math.sin(freq1 * t);
-      const x2 = canvas.width / 2 + 80 - 30 * Math.sin(freq2 * t);
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = '#38bdf8';
-      ctx.fillRect(x1 - 20, canvas.height / 2 - 20, 40, 40);
-      ctx.fillRect(x2 - 20, canvas.height / 2 - 20, 40, 40);
+    const x1 = canvas.width / 2 - 80 + 30 * Math.sin(freq1 * t);
+    const x2 = canvas.width / 2 + 80 - 30 * Math.sin(freq2 * t);
 
-      t += 0.02;
-      requestAnimationFrame(animate);
-    }
+    ctx.fillStyle = "#38bdf8";
+    ctx.fillRect(x1 - 20, canvas.height / 2 - 20, 40, 40);
+    ctx.fillRect(x2 - 20, canvas.height / 2 - 20, 40, 40);
 
-    animate();
-  </script>
+    t += 0.02;
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+</script>
 
 </body>
 </html>
